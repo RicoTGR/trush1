@@ -529,15 +529,6 @@
          return lines;
       }
   
-    function clearDrawing($canvas)
-      {
-         $canvas.each(function()
-           {
-              var ctx = this.getContext('2d');
-              ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
-           });
-      }
-  
     function validate()
       {
          var f = $('.c-field:not([fieldtype=none])'),
@@ -575,22 +566,6 @@
            });
   
          return o;
-      }
-  
-    function fillImage(img, color, w, h)
-      {
-         var c = $('<canvas>')[0],
-             ctx;
-  
-         c.width = w;
-         c.height = h;
-  
-         ctx = c.getContext('2d');
-  
-         ctx.fillStyle = color;
-         ctx.fillRect(0,0,w,h);
-  
-         img.src = c.toDataURL();
       }
   
     $(function()
@@ -660,25 +635,30 @@
     */
   
     $(document).ready(function(){
-  
+      
+      let counter = 0;
       ///////////////////////
       // Change image on click
   
-  /*    $('#draw-picker').click(function(){
-  
+      $('#draw-picker').click(function(){
+         
         var previous = $('.drawing').prev('.main'),
           $canvas = $('canvas');
+         if (counter === 5) {
+            setTimeout(function(){
+               $('.drawing').fadeOut('500');
+               previous.fadeOut('500', function(){
+                 previous.prependTo($('.wrapper')).css('display','block');
+                 clearDrawing($canvas);
+                 $('.drawing').css('display','block');          
+               });
+             }, 800);
+         } else {
+            counter++;
+         }
+        
   
-        setTimeout(function(){
-          $('.drawing').fadeOut('500');
-          previous.fadeOut('500', function(){
-            previous.prependTo($('.wrapper')).css('display','block');
-            clearDrawing($canvas);
-            $('.drawing').css('display','block');          
-          });
-        }, 800);
-  
-      });*/
+      });
     });
   
   })(jQuery);
