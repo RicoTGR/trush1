@@ -1,6 +1,7 @@
 (function($){
 
    let counter = 1;
+   let audio = new Audio('src/sound.mp3');
 
     function renderCrackEffectRefract(cvs, img, p1, p2, line)
       {
@@ -72,7 +73,7 @@
              dd = line.dl / 3,
              grd,
              //clr = jQuery.Color('rgb(255,0,0)');
-             clr = jQuery.Color(`rgb(${getRandomInt(255)},${getRandomInt(255)},${getRandomInt(255)})`);
+             clr = jQuery.Color(`rgb(${getRandomInt(255)},${getRandomInt(255)},${getRandomInt(122)})`);
   
          if (0.3 === 0) return;
   
@@ -423,15 +424,12 @@
          * created by incrementing the starting radius.
          */
          
+         
          if(counter < 2) {
             num = 2;
          } else {
-            num = getRandomInt(12); //змінює кількість тріщин
+            num = counter*2+5; //змінює кількість тріщин
          }
-         if(num === 0 || num === 1) {
-            num = 2;
-         }
-
          ang = 1/(num+1); // кут замалювання
   
          while (main[0].length < num)
@@ -441,7 +439,7 @@
             main[0].push({angle: num2, point: pt2});
          }
   
-         while(r < 500) // довжина тріщини
+         while(r < counter*50+500) // довжина тріщини
          {
             main[level]=[];
             for (num2=0;num2<num;num2++)
@@ -665,19 +663,19 @@
          
         var previous = $('.drawing').prev('.main'),
           $canvas = $('canvas');
-         if (counter === 6) {
+          audio.play();
+         if (counter === 5) {
             setTimeout(function(){
                $('.drawing').fadeOut('500');
                previous.fadeOut('500', function(){
                  previous.prependTo($('.wrapper')).css('display','block');
-                 clearDrawing($canvas);     
+                 clearDrawing($canvas);
+                 document.getElementById('picture-b').style.display = "none";
                });
              }, 800);
          } else {
             counter++;
          }
-        
-  
       });
     });
   

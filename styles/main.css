@@ -22,12 +22,16 @@ body {
 	position: absolute;
   width: 100%;
   height: 100%;
+  top:0;
+  left:0;
 }
 /* ------------------------------------------- *\
 	Drawing
 \* ------------------------------------------- */
 .drawing {
-	position: relative;
+	position: absolute;
+	top: 0;
+	left: 0;
 }
 .drawing > * {
 	position: absolute;
