@@ -1,5 +1,7 @@
 (function($){
 
+   let counter = 1;
+
     function renderCrackEffectRefract(cvs, img, p1, p2, line)
       {
          var ctx = cvs.getContext('2d'),
@@ -69,7 +71,8 @@
   
              dd = line.dl / 3,
              grd,
-             clr = jQuery.Color('rgb(255,255,255)');
+             //clr = jQuery.Color('rgb(255,0,0)');
+             clr = jQuery.Color(`rgb(${getRandomInt(255)},${getRandomInt(255)},${getRandomInt(255)})`);
   
          if (0.3 === 0) return;
   
@@ -391,10 +394,14 @@
   
          return o;
       }
+
+      function getRandomInt(max) {
+         return Math.floor(Math.random() * max);
+       }
   
     function findCrackEffectPaths(options)
       {
-         var imx = 0,
+         let imx = 0,
              imy = 0,
              imw = options.width,
              imh = options.height,
@@ -415,18 +422,26 @@
          * lines at different intervals defined by the concentric circles
          * created by incrementing the starting radius.
          */
-  
-         num = 20;
-         ang = 360/(num+1);
+         
+         if(counter < 2) {
+            num = 2;
+         } else {
+            num = getRandomInt(12); //змінює кількість тріщин
+         }
+         if(num === 0 || num === 1) {
+            num = 2;
+         }
+
+         ang = 1/(num+1); // кут замалювання
   
          while (main[0].length < num)
          {
-            num2 = (ang*main[0].length)+10;
+            num2 = (ang*main[0].length)+getRandomInt(360); // змінює напрямок
             pt2 = findPointOnCircle(c, 5, num2);
             main[0].push({angle: num2, point: pt2});
          }
   
-         while(r < 500)
+         while(r < 500) // довжина тріщини
          {
             main[level]=[];
             for (num2=0;num2<num;num2++)
@@ -528,7 +543,16 @@
   
          return lines;
       }
-  
+      
+      function clearDrawing($canvas)
+    {
+       $canvas.each(function()
+         {
+            var ctx = this.getContext('2d');
+            ctx.clearRect(0,0,ctx.canvas.width,ctx.canvas.height);
+         });
+    }
+    
     function validate()
       {
          var f = $('.c-field:not([fieldtype=none])'),
@@ -621,13 +645,10 @@
                options.debug = true;
   
                paths = findCrackEffectPaths(options);
-  
-               // clearDrawing($canvas);
                renderCrackEffectAll($canvas, $image, paths, options);
             }
   
           });
-        console.log('init() run')
       }
   
     /**********************************************************************************
@@ -636,7 +657,7 @@
   
     $(document).ready(function(){
       
-      let counter = 0;
+      
       ///////////////////////
       // Change image on click
   
@@ -644,13 +665,12 @@
          
         var previous = $('.drawing').prev('.main'),
           $canvas = $('canvas');
-         if (counter === 5) {
+         if (counter === 6) {
             setTimeout(function(){
                $('.drawing').fadeOut('500');
                previous.fadeOut('500', function(){
                  previous.prependTo($('.wrapper')).css('display','block');
-                 clearDrawing($canvas);
-                 $('.drawing').css('display','block');          
+                 clearDrawing($canvas);     
                });
              }, 800);
          } else {
